@@ -132,9 +132,9 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
             : undefined,
         opacity: isDragging ? 0.4 : 1.0,
         backgroundImage: `url(${item?.name ? getItemUrl(item as SlotWithItem) : 'none'}`,
-        backgroundPosition: 'center 60%',
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: '70% auto',
+        backgroundSize: '60% auto',
         border: isOver ? '1px dashed rgba(255,255,255,0.4)' : '',
       }}
     >
@@ -161,22 +161,40 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
           >
             {inventoryType === 'player' && item.slot <= 5 && <div className="inventory-slot-number">{item.slot}</div>}
             <div className="item-slot-info-wrapper">
-              <p>
-                {item.weight > 0
+              <p
+                style={{
+                  position: 'relative',
+                  top: '-4px',
+                  margin: 0,
+                  fontSize: '12px',
+                }}
+              >
+                {item?.weight && item.weight > 0
                   ? item.weight >= 1000
-                    ? `${(item.weight / 1000).toLocaleString('en-us', {
+                    ? `${(item.weight / 1000).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
-                      })}kg `
-                    : `${item.weight.toLocaleString('en-us', {
+                      })}kg`
+                    : `${item.weight.toLocaleString('en-US', {
                         minimumFractionDigits: 0,
-                      })}g `
+                      })}g`
                   : ''}
               </p>
-              <p>{item.count ? item.count.toLocaleString('en-us') + `x` : ''}</p>
+              <p
+                style={{
+                  position: 'relative',
+                  top: '-4px',
+                  margin: 0,
+                  fontSize: '12px',
+                }}
+              >
+                {item?.count ? `${item.count.toLocaleString('en-US')}x` : ''}
+              </p>
             </div>
           </div>
           <div>
-            {inventoryType !== 'shop' && item?.durability !== undefined && <WeightBar percent={item.durability} durability />}
+            {inventoryType !== 'shop' && item?.durability !== undefined && (
+              <WeightBar percent={item.durability} durability />
+            )}
             {inventoryType === 'shop' && item?.price !== undefined && (
               <>
                 {item?.currency !== 'money' && item.currency !== 'black_money' && item.price > 0 && item.currency ? (
@@ -211,9 +229,11 @@ const InventorySlot: React.ForwardRefRenderFunction<HTMLDivElement, SlotProps> =
                 )}
               </>
             )}
-            {}
-            {/*
-            */}
+            <div className="inventory-slot-label-box">
+              <div className="inventory-slot-label-text">
+                {item.metadata?.label ? item.metadata.label : Items[item.name]?.label || item.name}
+              </div>
+            </div>
           </div>
         </div>
       )}
