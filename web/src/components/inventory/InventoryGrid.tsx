@@ -10,10 +10,7 @@ const PAGE_SIZE = 30;
 
 const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
   const weight = useMemo(
-    () =>
-      inventory.maxWeight !== undefined
-        ? Math.floor(getTotalWeight(inventory.items) * 1000) / 1000
-        : 0,
+    () => (inventory.maxWeight !== undefined ? Math.floor(getTotalWeight(inventory.items) * 1000) / 1000 : 0),
     [inventory.maxWeight, inventory.items]
   );
   const [page, setPage] = useState(0);
@@ -29,44 +26,21 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
 
   return (
     <>
-      <div
-        className="inventory-grid-wrapper"
-        style={{ pointerEvents: isBusy ? 'none' : 'auto' }}
-      >
+      <div className="inventory-grid-wrapper" style={{ pointerEvents: isBusy ? 'none' : 'auto' }}>
         <div>
           <div className="inventory-grid-header-wrapper">
-            {}
-<p
-  style={{
-    fontFamily: 'Oswald, sans-serif',
-    fontSize: '28px',
-    margin: 0,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    lineHeight: 1,
-    filter:
-      'drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.3))',
-  }}
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    height="25px"
-    width="25px"
-    viewBox="0 0 16 16"
-    fill="#fff"
-    style={{
-      display: 'block',
-      marginTop: '4px',
-    }}
-  >
-<path d="M10.31,9.12H5.5A4.52,4.52,0,0,0,1,13.62,2.34,2.34,0,0,0,1,14H14.78a2.34,2.34,0,0,0,0-.38A4.51,4.51,0,0,0,10.31,9.12ZM8,7.88A3.94,3.94,0,1,0,4.06,3.94,3.94,3.94,0,0,0,8,7.88Z"/>
-  </svg>
+            <p
+              style={{
+                fontFamily: 'Oswald, sans-serif',
+                fontSize: '28px',
+                margin: 0,
+                filter:
+                  'drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.3))',
+              }}
+            >
+              {inventory.label}
+            </p>
 
-  {inventory.label}
-</p>
-
-            {/* Weight on the right side with bag icon */}
             {inventory.maxWeight && (
               <p
                 style={{
@@ -79,7 +53,6 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
                     'drop-shadow(0 0 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 4px rgba(255, 255, 255, 0.3))',
                 }}
               >
-                {/* Bag Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="25px"
@@ -100,7 +73,6 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
                   />
                 </svg>
 
-                {/* Divider line */}
                 <div
                   style={{
                     height: '1em',
@@ -112,7 +84,6 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
                   }}
                 />
 
-                {/* Weight values */}
                 {weight / 1000} / {inventory.maxWeight / 1000} kg
               </p>
             )}
@@ -121,20 +92,16 @@ const InventoryGrid: React.FC<{ inventory: Inventory }> = ({ inventory }) => {
 
         <div className="inventory-grid-container" ref={containerRef}>
           <>
-            {inventory.items
-              .slice(0, (page + 1) * PAGE_SIZE)
-              .map((item, index) => (
-                <InventorySlot
-                  key={`${inventory.type}-${inventory.id}-${item.slot}`}
-                  item={item}
-                  ref={
-                    index === (page + 1) * PAGE_SIZE - 1 ? ref : null
-                  }
-                  inventoryType={inventory.type}
-                  inventoryGroups={inventory.groups}
-                  inventoryId={inventory.id}
-                />
-              ))}
+            {inventory.items.slice(0, (page + 1) * PAGE_SIZE).map((item, index) => (
+              <InventorySlot
+                key={`${inventory.type}-${inventory.id}-${item.slot}`}
+                item={item}
+                ref={index === (page + 1) * PAGE_SIZE - 1 ? ref : null}
+                inventoryType={inventory.type}
+                inventoryGroups={inventory.groups}
+                inventoryId={inventory.id}
+              />
+            ))}
           </>
         </div>
       </div>
